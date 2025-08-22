@@ -8,7 +8,6 @@ Runs **without** a BERTopic model. Uses saved CSV artifacts only:
 - outputs/topic_terms.csv              (topic, term, weight)
 - outputs/topic_trends_by_year.csv     (year, topic, count, n, share)
 - outputs/topic_rep_docs.csv           (topic, rank, doc_full|abstract|doc|doc_id, title?) [optional]
-- data/processed/physics_clean.(parquet|csv)  (id, abstract[, title]) [optional for doc_id join]
 
 Run:
     streamlit run app/streamlit_app.py
@@ -52,25 +51,6 @@ def load_csv(path: Path) -> Optional[pd.DataFrame]:
         st.warning(f"Failed to load {path.name}: {e}")
     return None
 
-@st.cache_data(show_spinner=False)
-def load_full_corpus() -> Optional[pd.DataFrame]:
-    """Optional corpus for joining doc_id -> full abstract/title."""
-    pq = DATA_DIR / "physics_clean.parquet"
-    csv = DATA_DIR / "physics_clean.csv"
-    df = None
-    try:
-        if pq.exists():
-            df = pd.read_parquet(pq)
-        elif csv.exists():
-            df = pd.read_csv(csv)
-    except Exception:
-        df = None
-    if isinstance(df, pd.DataFrame):
-        keep = [c for c in ["id","title","abstract","abstract_clean","year"] if c in df.columns]
-        df = df[keep].copy()
-        if "id" in df.columns:
-            df["id"] = df["id"].astype(str)
-    return df
 
 # --------------------- Load artifacts & Health Check ---------------------
 SHOW_HEALTHCHECK = bool(int(os.getenv("SHOW_HEALTHCHECK", "0"))) ## debugging mode
@@ -88,7 +68,6 @@ terms  = load_csv(TOPIC_TERMS_CSV)
 trends = load_csv(TOPIC_TRENDS_CSV)
 repdocs= load_csv(TOPIC_REPDOCS_CSV)
 assign = load_csv(ASSIGN_CSV)
-FULL_CORPUS = load_full_corpus()
 
 missing = []
 if not isinstance(info, pd.DataFrame):
