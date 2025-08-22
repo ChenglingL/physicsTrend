@@ -2,7 +2,8 @@
 Explore 20-year research trends on arXiv across **physics** and **cond-mat** using precomputed BERTopic artifacts — **no large model required**. Browse topics, see top terms, read representative abstracts, and plot yearly prevalence.
 
 > **Live demo:** https://physicstrend-gyc5hefqjfhjtymkheyvbb.streamlit.app/
-> **Training pipeline:** https://github.com/ChenglingL/abstract-trend
+
+> **Training pipeline (find the trend in you own area):** https://github.com/ChenglingL/abstract-trend
 
 ---
 
