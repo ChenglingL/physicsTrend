@@ -117,7 +117,7 @@ with st.sidebar:
     st.code("".join([str(TOPIC_INFO_CSV), str(TOPIC_TERMS_CSV), str(TOPIC_TRENDS_CSV)]))
 
 # KPIs
-n_docs = int(assign.shape[0]) if isinstance(assign, pd.DataFrame) and not assign.empty else int(trends["n"].max())
+n_docs = int(assign.shape[0]) if isinstance(assign, pd.DataFrame) and not assign.empty else int(info["Count"].sum())
 outliers = int(info.loc[info["Topic"] == -1, "Count"].iloc[0]) if (-1 in info["Topic"].values) else 0
 n_topics = int((info["Topic"] != -1).sum())
 with col1:
